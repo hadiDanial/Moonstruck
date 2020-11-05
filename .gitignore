@@ -16,6 +16,8 @@
 /Moonstruck/[Bb]uilds/
 /Moonstruck/[Ll]ogs/
 /Moonstruck/[Mm]emoryCaptures/
+/Moonstruck/[Aa]ssets/[Aa]starPathfindingProject
+/Moonstruck/[Aa]ssets/_TerrainAutoUpgrade
 
 # Never ignore Asset meta data
 !/[Aa]ssets/**/*.meta
