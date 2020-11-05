@@ -9,6 +9,13 @@
 /[Bb]uilds/
 /[Ll]ogs/
 /[Mm]emoryCaptures/
+/Moonstruck/[Ll]ibrary/
+/Moonstruck/[Tt]emp/
+/Moonstruck/[Oo]bj/
+/Moonstruck/[Bb]uild/
+/Moonstruck/[Bb]uilds/
+/Moonstruck/[Ll]ogs/
+/Moonstruck/[Mm]emoryCaptures/
 
 # Never ignore Asset meta data
 !/[Aa]ssets/**/*.meta
