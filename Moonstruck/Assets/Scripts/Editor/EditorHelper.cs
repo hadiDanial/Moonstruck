@@ -17,6 +17,7 @@ public class EditorHelper : Editor
     public static void FoldoutObjectList<T>(List<T> myList, T type, string headerLabel, string addLabel) where T : Object
     {
         EditorGUILayout.Space();
+        if (myList == null) myList = new List<T>();
         showFoldoutList = EditorGUILayout.BeginFoldoutHeaderGroup(showFoldoutList, "Weapon Sounds");
         if (showFoldoutList)
         {
@@ -38,7 +39,8 @@ public class EditorHelper : Editor
             EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Remove Last Item"))
             {
-                myList.RemoveAt(myList.Count - 1);
+                if (myList.Count >= 1)
+                    myList.RemoveAt(myList.Count - 1);
             }
             if (GUILayout.Button("Clear List"))
             {
