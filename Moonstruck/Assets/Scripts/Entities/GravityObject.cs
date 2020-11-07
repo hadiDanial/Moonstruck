@@ -6,8 +6,8 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class GravityObject : MonoBehaviour
 {
-    private static float normalGravity = -9.8f;
-    private static float moonGravity = -1.62f;
+    private static float normalGravity = -50f;
+    private static float moonGravity = -10f;
 
     internal Rigidbody2D rb;
     public GravityState currentState = GravityState.NormalGravity;
@@ -41,6 +41,21 @@ public class GravityObject : MonoBehaviour
     {
         currentState = state;
         Invoke("SetGravityStateInternal", delay);
+    }
+
+    public float GetCurrentGravity()
+    {
+        switch (currentState)
+        {
+            case GravityState.NormalGravity:
+                return normalGravity;
+            case GravityState.MoonGravity:
+                return moonGravity;
+            case GravityState.Weightless:
+                return 0;
+            default:
+                return normalGravity;
+        }
     }
 }
 
