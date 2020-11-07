@@ -57,6 +57,11 @@ public class GravityObject : MonoBehaviour
                 return normalGravity;
         }
     }
+
+    public float GetNormalGravity()
+    {
+        return normalGravity;
+    }
 }
 
 public enum GravityState
