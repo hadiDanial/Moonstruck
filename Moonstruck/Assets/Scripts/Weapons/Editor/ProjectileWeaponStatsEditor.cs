@@ -5,8 +5,8 @@ using UnityEngine;
 public class ProjectileWeaponStatsEditor : Editor
 {
     ProjectileWeaponStats stats;
-    GameObject gObj;
-    AudioClip clip;
+    public GameObject gObj;
+    public AudioClip clip;
     public override void OnInspectorGUI()
     {
         //base.OnInspectorGUI();

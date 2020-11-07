@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0dc26435b1c8b34b87c7d7c79101255, type: 3}
   m_Name: Projectile Weapon Stats
   m_EditorClassIdentifier: 
-  weaponName: 
-  dmg: 0
-  timeBetweenAttacks: 0
+  weaponName: Weapon
+  dmg: 1
+  timeBetweenAttacks: 0.5
   weaponSounds: []
-  projectileSpeed: 0
+  projectileSpeed: 0.5
   projectilePrefab: {fileID: 0}

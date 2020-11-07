@@ -5,7 +5,7 @@ using UnityEngine;
 public class WeaponStatsEditor : Editor
 {
     WeaponStats stats;
-    AudioClip clip;
+    public AudioClip clip;
     public override void OnInspectorGUI()
     {
         //base.OnInspectorGUI();
