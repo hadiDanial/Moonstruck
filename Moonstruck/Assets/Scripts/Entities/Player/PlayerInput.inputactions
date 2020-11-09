@@ -121,9 +121,9 @@
                 {
                     "name": "Gamepad",
                     "id": "c5a245d1-1776-4552-8dec-735f33b52eac",
-                    "path": "2DVector",
+                    "path": "2DVector(mode=2)",
                     "interactions": "",
-                    "processors": "",
+                    "processors": "StickDeadzone",
                     "groups": "",
                     "action": "Movement",
                     "isComposite": true,
@@ -297,9 +297,9 @@
                 {
                     "name": "R Stick",
                     "id": "379dc39c-ae9e-45e8-ae12-d8758c5f56f4",
-                    "path": "2DVector",
+                    "path": "2DVector(mode=2)",
                     "interactions": "",
-                    "processors": "",
+                    "processors": "StickDeadzone",
                     "groups": "",
                     "action": "GamepadAim",
                     "isComposite": true,
@@ -372,7 +372,7 @@
                     "interactions": ""
                 },
                 {
-                    "name": "Back",
+                    "name": "Pause/Back",
                     "type": "Button",
                     "id": "85d40f7d-59ba-4d95-b502-f1dc6df07842",
                     "expectedControlType": "Button",
@@ -542,7 +542,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Back",
+                    "action": "Pause/Back",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -553,7 +553,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Back",
+                    "action": "Pause/Back",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -564,7 +564,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Back",
+                    "action": "Pause/Back",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

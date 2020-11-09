@@ -134,9 +134,9 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 {
                     ""name"": ""Gamepad"",
                     ""id"": ""c5a245d1-1776-4552-8dec-735f33b52eac"",
-                    ""path"": ""2DVector"",
+                    ""path"": ""2DVector(mode=2)"",
                     ""interactions"": """",
-                    ""processors"": """",
+                    ""processors"": ""StickDeadzone"",
                     ""groups"": """",
                     ""action"": ""Movement"",
                     ""isComposite"": true,
@@ -310,9 +310,9 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 {
                     ""name"": ""R Stick"",
                     ""id"": ""379dc39c-ae9e-45e8-ae12-d8758c5f56f4"",
-                    ""path"": ""2DVector"",
+                    ""path"": ""2DVector(mode=2)"",
                     ""interactions"": """",
-                    ""processors"": """",
+                    ""processors"": ""StickDeadzone"",
                     ""groups"": """",
                     ""action"": ""GamepadAim"",
                     ""isComposite"": true,
@@ -385,7 +385,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""Back"",
+                    ""name"": ""Pause/Back"",
                     ""type"": ""Button"",
                     ""id"": ""85d40f7d-59ba-4d95-b502-f1dc6df07842"",
                     ""expectedControlType"": ""Button"",
@@ -555,7 +555,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Back"",
+                    ""action"": ""Pause/Back"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -566,7 +566,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Back"",
+                    ""action"": ""Pause/Back"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -577,7 +577,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Back"",
+                    ""action"": ""Pause/Back"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -627,7 +627,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         m_Menu = asset.FindActionMap("Menu", throwIfNotFound: true);
         m_Menu_Movement = m_Menu.FindAction("Movement", throwIfNotFound: true);
         m_Menu_Enter = m_Menu.FindAction("Enter", throwIfNotFound: true);
-        m_Menu_Back = m_Menu.FindAction("Back", throwIfNotFound: true);
+        m_Menu_PauseBack = m_Menu.FindAction("Pause/Back", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -760,14 +760,14 @@ public class @PlayerInput : IInputActionCollection, IDisposable
     private IMenuActions m_MenuActionsCallbackInterface;
     private readonly InputAction m_Menu_Movement;
     private readonly InputAction m_Menu_Enter;
-    private readonly InputAction m_Menu_Back;
+    private readonly InputAction m_Menu_PauseBack;
     public struct MenuActions
     {
         private @PlayerInput m_Wrapper;
         public MenuActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
         public InputAction @Movement => m_Wrapper.m_Menu_Movement;
         public InputAction @Enter => m_Wrapper.m_Menu_Enter;
-        public InputAction @Back => m_Wrapper.m_Menu_Back;
+        public InputAction @PauseBack => m_Wrapper.m_Menu_PauseBack;
         public InputActionMap Get() { return m_Wrapper.m_Menu; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -783,9 +783,9 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 @Enter.started -= m_Wrapper.m_MenuActionsCallbackInterface.OnEnter;
                 @Enter.performed -= m_Wrapper.m_MenuActionsCallbackInterface.OnEnter;
                 @Enter.canceled -= m_Wrapper.m_MenuActionsCallbackInterface.OnEnter;
-                @Back.started -= m_Wrapper.m_MenuActionsCallbackInterface.OnBack;
-                @Back.performed -= m_Wrapper.m_MenuActionsCallbackInterface.OnBack;
-                @Back.canceled -= m_Wrapper.m_MenuActionsCallbackInterface.OnBack;
+                @PauseBack.started -= m_Wrapper.m_MenuActionsCallbackInterface.OnPauseBack;
+                @PauseBack.performed -= m_Wrapper.m_MenuActionsCallbackInterface.OnPauseBack;
+                @PauseBack.canceled -= m_Wrapper.m_MenuActionsCallbackInterface.OnPauseBack;
             }
             m_Wrapper.m_MenuActionsCallbackInterface = instance;
             if (instance != null)
@@ -796,9 +796,9 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 @Enter.started += instance.OnEnter;
                 @Enter.performed += instance.OnEnter;
                 @Enter.canceled += instance.OnEnter;
-                @Back.started += instance.OnBack;
-                @Back.performed += instance.OnBack;
-                @Back.canceled += instance.OnBack;
+                @PauseBack.started += instance.OnPauseBack;
+                @PauseBack.performed += instance.OnPauseBack;
+                @PauseBack.canceled += instance.OnPauseBack;
             }
         }
     }
@@ -835,6 +835,6 @@ public class @PlayerInput : IInputActionCollection, IDisposable
     {
         void OnMovement(InputAction.CallbackContext context);
         void OnEnter(InputAction.CallbackContext context);
-        void OnBack(InputAction.CallbackContext context);
+        void OnPauseBack(InputAction.CallbackContext context);
     }
 }

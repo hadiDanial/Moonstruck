@@ -292,7 +292,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: 7.5
-  stoppingPower: 0.05
+  stoppingPower: 0.125
   jumpForce: 9
   jumpGracePeriod: 0.1
   canDoubleJump: 1
@@ -310,6 +310,7 @@ MonoBehaviour:
   enemyMask:
     serializedVersion: 2
     m_Bits: 1024
+  settings: {fileID: 0}
 --- !u!114 &948753471
 MonoBehaviour:
   m_ObjectHideFlags: 0
