@@ -8,6 +8,8 @@ public class GravityObject : MonoBehaviour
 {
     private static float normalGravity = -50f;
     private static float moonGravity = -10f;
+    private static float groundedGravity = -2f;
+    private static float zeroGravity = 0;
 
     internal Rigidbody2D rb;
     public GravityState currentState = GravityState.NormalGravity;
@@ -29,8 +31,11 @@ public class GravityObject : MonoBehaviour
             case GravityState.MoonGravity:
                 rb.gravityScale = moonGravity;
                 break;
+            case GravityState.GroundedGravity:
+                rb.gravityScale = groundedGravity;
+                break;
             case GravityState.Weightless:
-                rb.gravityScale = 0;
+                rb.gravityScale = zeroGravity;
                 break;
             default:
                 break;
@@ -43,6 +48,12 @@ public class GravityObject : MonoBehaviour
         Invoke("SetGravityStateInternal", delay);
     }
 
+
+    public GravityState GetGravityState()
+    {
+        return currentState;
+    }
+
     public float GetCurrentGravity()
     {
         switch (currentState)
@@ -51,8 +62,26 @@ public class GravityObject : MonoBehaviour
                 return normalGravity;
             case GravityState.MoonGravity:
                 return moonGravity;
+            case GravityState.GroundedGravity:
+                return groundedGravity;
             case GravityState.Weightless:
-                return 0;
+                return zeroGravity;
+            default:
+                return normalGravity;
+        }
+    }
+    public float GetStateGravity(GravityState state)
+    {
+        switch (state)
+        {
+            case GravityState.NormalGravity:
+                return normalGravity;
+            case GravityState.MoonGravity:
+                return moonGravity;
+            case GravityState.GroundedGravity:
+                return groundedGravity;
+            case GravityState.Weightless:
+                return zeroGravity;
             default:
                 return normalGravity;
         }
@@ -62,9 +91,14 @@ public class GravityObject : MonoBehaviour
     {
         return normalGravity;
     }
+
+    internal void SetGravity(GravityState gravityState)
+    {
+        rb.gravityScale = GetStateGravity(gravityState);
+    }
 }
 
 public enum GravityState
 {
-    NormalGravity, MoonGravity, Weightless
+    NormalGravity, MoonGravity, GroundedGravity, Weightless
 }

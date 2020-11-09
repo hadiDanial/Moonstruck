@@ -8,10 +8,17 @@ public class Entity : MonoBehaviour
 {
     [Header("Movement")]
     [SerializeField] protected float movementSpeed;
+    [SerializeField, Range(0, 1f), Tooltip("How fast the Entity stops moving when there is no input")]
+                     protected float stoppingPower = 0.125f;
     [SerializeField] protected float jumpForce;
-    [SerializeField, Range(0, 0.4f)] protected float jumpGracePeriod = 0.1f;
-    [SerializeField, Range(0, 2)] protected float airControlPercent = 0.45f;
+    [SerializeField, Range(0, 0.4f)]
+                     protected float jumpGracePeriod = 0.1f;
+    [SerializeField] protected bool canDoubleJump = false;
+    [SerializeField, Range(0, 2)] 
+                     protected float airControlPercent = 0.45f;
     [SerializeField] protected bool useGravity;
+    [SerializeField, Tooltip("This is only to show whether the entity is grounded. Can not modify.")] 
+                     protected bool isGrounded;
 
     [Header("Health")]
     [SerializeField] protected int maxHealth;
@@ -37,9 +44,9 @@ public class Entity : MonoBehaviour
 
     internal float currentMovementMultiplier;
     internal float jumpTimeElapsed;
-    internal bool isGrounded => CheckIsGrounded();
-    internal bool canJump => isGrounded || jumpTimeElapsed >= 0;
-    internal bool isCollided, hasJumped;
+    internal bool _isGrounded => CheckIsGrounded();
+    internal bool canJump => _isGrounded || jumpTimeElapsed >= 0;
+    internal bool isCollided, hasJumped, hasDoubleJumped;
     internal float totalSpeedMultiplier => movementSpeed * currentMovementMultiplier * internalSpeedMultiplier;
 
     internal virtual void Awake()
@@ -49,12 +56,19 @@ public class Entity : MonoBehaviour
         SetupEntity();
     }
 
-    internal virtual void Update()
+    internal virtual void FixedUpdate()
     {
+        Move();
+    }
+
+    internal virtual void Move()
+    {
+        isGrounded = _isGrounded;
         if (IsActive())
         {
             jumpTimeElapsed = isGrounded ? jumpGracePeriod : jumpTimeElapsed - Time.deltaTime;
-            rb.gravityScale = (isGrounded && !hasJumped) || (isGrounded && isCollided) ? 0 : gravityObj.GetCurrentGravity();
+            gravityObj.SetGravity((isGrounded && !hasJumped) || (isGrounded && isCollided) ? GravityState.GroundedGravity : gravityObj.GetGravityState());
+            //rb.gravityScale = (isGrounded && !hasJumped) || (isGrounded && isCollided) ? 0 : gravityObj.GetCurrentGravity();
             if (input != Vector2.zero)
             {
                 currentMovementMultiplier = isGrounded ? 1 : airControlPercent;
@@ -62,24 +76,36 @@ public class Entity : MonoBehaviour
             }
             else
             {
-                if (rb.velocity != Vector2.zero)
-                    rb.velocity = new Vector2(0.7f * rb.velocity.x, rb.velocity.y);
+                rb.AddForce(-rb.velocity.x * Vector2.right * totalSpeedMultiplier * stoppingPower * Time.deltaTime);
             }
         }
-
-
     }
 
     internal virtual void Jump()
     {
-        if (IsActive() && canJump && !hasJumped ) 
+        Vector2 doubleJumpBoost = Vector2.up;
+        if (!IsActive()) 
+            return;
+        // Jump
+        if (canJump && !hasJumped) 
         {
             hasJumped = true;
             rb.AddForce(Vector2.up * jumpForce * 10, ForceMode2D.Impulse);
         }
+        // Double Jump
+        else if (canDoubleJump && hasJumped && !hasDoubleJumped)
+        {
+            // Jump boost for if the player is falling
+            if (rb.velocity.y <= 0.1f) doubleJumpBoost = doubleJumpBoost + Vector2.up * Mathf.Clamp01(Mathf.Abs(rb.velocity.y));
+            hasDoubleJumped = true;
+            rb.AddForce(jumpForce * doubleJumpBoost * 8, ForceMode2D.Impulse);
+        }
     }
 
 
+    /// <summary>
+    /// The initial setup of the Entity
+    /// </summary>
     internal virtual void SetupEntity()
     {
         currentHealth = maxHealth;
@@ -222,7 +248,11 @@ public class Entity : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         isCollided = true;
-        if (isGrounded) hasJumped = false;
+        if (_isGrounded)
+        {
+            hasJumped = false;
+            hasDoubleJumped = false;
+        }
     }
     private void OnCollisionStay2D(Collision2D collision)
     {
