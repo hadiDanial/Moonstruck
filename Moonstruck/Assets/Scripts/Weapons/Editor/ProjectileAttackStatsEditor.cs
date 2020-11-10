@@ -1,19 +1,19 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(ProjectileWeaponStats))]
-public class ProjectileWeaponStatsEditor : Editor
+[CustomEditor(typeof(ProjectileAttackStats))]
+public class ProjectileAttackStatsEditor : Editor
 {
-    ProjectileWeaponStats stats;
+    ProjectileAttackStats stats;
     public GameObject gObj;
     public AudioClip clip;
     public override void OnInspectorGUI()
     {
         //base.OnInspectorGUI();
-        stats = target as ProjectileWeaponStats;
+        stats = target as ProjectileAttackStats;
 
         EditorGUILayout.BeginVertical();
-        stats.weaponName = EditorHelper.TextField("Weapon Name", stats.weaponName);
+        stats.attackName = EditorHelper.TextField("Weapon Name", stats.attackName);
         EditorGUILayout.BeginHorizontal();
         stats.dmg = EditorHelper.IntField("Weapon Damage", stats.dmg);
         stats.timeBetweenAttacks = EditorHelper.FloatField("Time Between Attacks", stats.timeBetweenAttacks);
