@@ -16,10 +16,10 @@ TagManager:
   - Ground
   - Player
   - Enemy
-  - Projectiles
-  - 
-  - 
-  - 
+  - Player Projectiles
+  - Enemy Projectiles
+  - Gravity Objects
+  - Cursor
   - 
   - 
   - 
