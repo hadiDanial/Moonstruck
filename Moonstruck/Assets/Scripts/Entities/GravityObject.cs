@@ -14,11 +14,25 @@ public class GravityObject : MonoBehaviour
     internal Rigidbody2D rb;
     public GravityState currentState = GravityState.NormalGravity;
     public GravityState initialState;
+    public Animator anim;
+
+    private float timer;
+    private bool returnToInitial = false;
     internal virtual void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         initialState = currentState;
         SetGravityStateInternal();
+    }
+
+    private void Update()
+    {
+        timer -= Time.deltaTime;
+        if(returnToInitial && timer<=0)
+        {
+            returnToInitial = false;
+            SetGravityState(initialState);
+        }
     }
 
     private void SetGravityStateInternal()
@@ -42,19 +56,60 @@ public class GravityObject : MonoBehaviour
         }
     }
 
-    public void SetGravityState(GravityState state, float delay = 0f)
+    /// <summary>
+    /// Sets the gravity state.
+    /// </summary>
+    /// <param name="state">New state to set.</param>
+    public void SetGravityState(GravityState state)
     {
         currentState = state;
-        Invoke("SetGravityStateInternal", delay);
+        SetRigidbodyGravity();
+        returnToInitial = false;
     }
 
+    /// <summary>
+    /// Sets the gravity state for a certain duration.
+    /// </summary>
+    /// <param name="state">New state to set.</param>
+    /// <param name="duration">Optional delay until the new state is set.</param>
+    public void SetGravityState(GravityState state, float duration = 1f)
+    {
+        currentState = state;
+        SetRigidbodyGravity();
+        // TODO - Glow animation?
+        returnToInitial = true;
+        timer = duration;
+    }
 
+    /// <summary>
+    /// Set the rigidbody's gravity scale to the gravityState's gravity value.
+    /// </summary>
+    /// <param name="gravityState">Gravity value to set for the rigidbody.</param>
+    internal void SetRigidbodyGravity()
+    {
+        rb.gravityScale = GetCurrentGravityValue();
+    }
+    /// <summary>
+    /// Set the rigidbody's gravity scale to the gravityState's gravity value.
+    /// </summary>
+    /// <param name="gravityState">Gravity value to set for the rigidbody.</param>
+    internal void SetRigidbodyGravity(GravityState gravityState)
+    {
+        rb.gravityScale = GetStateGravity(gravityState);
+    }
+
+    /// <summary>
+    /// Returns the current GravityState.
+    /// </summary>
     public GravityState GetGravityState()
     {
         return currentState;
     }
 
-    public float GetCurrentGravity()
+    /// <summary>
+    /// Returns the gravity value for the current state.
+    /// </summary>
+    public float GetCurrentGravityValue()
     {
         switch (currentState)
         {
@@ -70,7 +125,13 @@ public class GravityObject : MonoBehaviour
                 return normalGravity;
         }
     }
-    public float GetStateGravity(GravityState state)
+
+    /// <summary>
+    /// Returns the gravity value for a given state.
+    /// </summary>
+    /// <param name="state">State to get gravity value from.</param>
+    /// <returns>Gravity value of the state.</returns>
+    public static float GetStateGravity(GravityState state)
     {
         switch (state)
         {
@@ -87,15 +148,15 @@ public class GravityObject : MonoBehaviour
         }
     }
 
-    public float GetNormalGravity()
+    /// <summary>
+    /// Returns the value for normal gravity.
+    /// </summary>
+    public static float GetNormalGravity()
     {
         return normalGravity;
     }
 
-    internal void SetGravity(GravityState gravityState)
-    {
-        rb.gravityScale = GetStateGravity(gravityState);
-    }
+
 }
 
 public enum GravityState

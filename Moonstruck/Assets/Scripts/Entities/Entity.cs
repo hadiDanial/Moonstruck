@@ -31,10 +31,13 @@ public class Entity : MonoBehaviour
     [SerializeField] protected LayerMask groundMask, enemyMask;
     internal float groundCheckDistance = 0.1f;
     internal int internalSpeedMultiplier = 1000;
+    [Header("Game Data")]
+    [SerializeField] public GameData gameData;
 
 
     internal Rigidbody2D rb;
     internal Collider2D col;
+    internal Animator anim;
     internal GravityObject gravityObj;
     internal Transform initialTransform;
     internal EntityState initialState;
@@ -67,7 +70,7 @@ public class Entity : MonoBehaviour
         if (IsActive())
         {
             jumpTimeElapsed = isGrounded ? jumpGracePeriod : jumpTimeElapsed - Time.deltaTime;
-            gravityObj.SetGravity((isGrounded && !hasJumped) || (isGrounded && isCollided) ? GravityState.GroundedGravity : gravityObj.GetGravityState());
+            gravityObj.SetRigidbodyGravity((isGrounded && !hasJumped) || (isGrounded && isCollided) ? GravityState.GroundedGravity : gravityObj.GetGravityState());
             //rb.gravityScale = (isGrounded && !hasJumped) || (isGrounded && isCollided) ? 0 : gravityObj.GetCurrentGravity();
             if (input != Vector2.zero)
             {
@@ -115,7 +118,8 @@ public class Entity : MonoBehaviour
         rb.angularVelocity = 0;
         if (col != null) col.isTrigger = false;
         if (!useGravity) gravityObj.SetGravityState(GravityState.Weightless);
-        rb.gravityScale = useGravity ? gravityObj.GetCurrentGravity() : 0;
+        rb.gravityScale = useGravity ? gravityObj.GetCurrentGravityValue() : 0;
+        gravityObj.anim = anim;
         SetEntityState();
     }
 
@@ -210,7 +214,7 @@ public class Entity : MonoBehaviour
         // TODO - Kill the Entity
         currentEntityState = EntityState.Dead;
         rb.velocity = Vector2.zero;
-        rb.gravityScale = gravityObj.GetNormalGravity();
+        rb.gravityScale = GravityObject.GetNormalGravity();
         if (col != null) col.isTrigger = true;
         // TODO - Sound effect here
     }
